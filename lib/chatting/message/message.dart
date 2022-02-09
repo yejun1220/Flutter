@@ -20,7 +20,7 @@ class Messages extends StatelessWidget {
 
         return ListView.builder(
           itemCount: chatDocs.length, // itemBuilder에서 보여줄 갯수
-          itemBuilder: (context, index) { // 리스트에 그려질 항목을 Lazt하게 child을 생성해준다.
+          itemBuilder: (context, index) { // 리스트에 그려질 항목을 Lazy하게 child을 생성해준다.
             return Text(chatDocs[index]['text']);
           },
         );

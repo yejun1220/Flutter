@@ -17,7 +17,7 @@ class _CounterState extends State<Counter> {
       appBar: AppBar(
         title: Text('Stream builder'),
       ),
-      body: StreamBuilder<int>( // 위젯이므로 body에 넣을 수 있다.
+      body: StreamBuilder<int>( // 위젯이므로 body에 넣을 수 있다. stream으로 전달되는 데이터를 구독할 수 있다.
         initialData: price, // 기본 값
         stream: addStreamValue(), // Stream 타입 저장
         builder: (context, snapshot) {  // snapshot은 stream의 결과물이다. streambuilder에게 인자로 전달한 snapshot을 이용하라는 의미이다.
