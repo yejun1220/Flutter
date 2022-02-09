@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:stream_builder/chatting/new_message.dart';
+import 'package:flutter_study/chatting/message/new_message.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();

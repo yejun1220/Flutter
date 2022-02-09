@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stream_builder/chatting/new_message.dart';
+import 'package:flutter_study/chatting/message/new_message.dart';
 
 class LoginSignupScreen extends StatefulWidget {
   const LoginSignupScreen({Key? key}) : super(key: key);

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:stream_builder/chatting/message.dart';
-import 'package:stream_builder/chatting/new_message.dart';
+import 'package:flutter_study/chatting/message/message.dart';
+import 'package:flutter_study/chatting/message/new_message.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
