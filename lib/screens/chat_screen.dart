@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:stream_builder/chatting/message.dart';
+import 'package:stream_builder/chatting/new_message.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -14,7 +16,8 @@ class _ChatScreenState extends State<ChatScreen> {
   User? loggedUser; // 값을 초기화하지 않을 것이므로 ? 을 붙여야 한다.
 
   @override
-  void initState() { // 위젯이 생성될 때 처음으로 호출되는 메서드다.
+  void initState() {
+    // 위젯이 생성될 때 처음으로 호출되는 메서드다.
     // TODO: implement initState
     super.initState();
     getCurrentUser();
@@ -34,6 +37,29 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Chat screen'),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.exit_to_app_sharp,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              _authentication.signOut();
+            },
+          )
+        ],
+      ),
+      body: Container(
+        child: Column(
+          children: [
+            Expanded(
+              child: Messages()),
+            NewMessage()],
+        ),
+      ),
+    );
   }
 }
