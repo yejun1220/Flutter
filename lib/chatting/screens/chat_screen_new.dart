@@ -53,29 +53,10 @@ class _ChatScreenState extends State<ChatScreen> {
           )
         ],
       ),
-
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('chats/G6d253stf2YXl9Y7wl1S/message')
-            .snapshots(), // snapshots은 Stream을 반환한다.
-        builder: (BuildContext context,
-            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-          if(snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
-          final docs = snapshot.data!.docs;
-          return ListView.builder(
-              itemCount: docs.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(docs[index]['text']),
-                );
-              });
-        }, // AsyncSnapshot은 가장 최신의 snapshot을 가져오게 한다.
+      body: Container(
+        child: Column(
+          children: [Expanded(child: Messages())],
+        ),
       ),
     );
   }

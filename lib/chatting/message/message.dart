@@ -7,7 +7,7 @@ class Messages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection("chat").snapshots(),
+      stream: FirebaseFirestore.instance.collection('chat').orderBy('time', descending: true).snapshots(),
       builder: (context,
           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
         if(snapshot.connectionState == ConnectionState.waiting) {
@@ -19,6 +19,7 @@ class Messages extends StatelessWidget {
         final chatDocs = snapshot.data!.docs;
 
         return ListView.builder(
+          reverse: true,
           itemCount: chatDocs.length, // itemBuilder에서 보여줄 갯수
           itemBuilder: (context, index) { // 리스트에 그려질 항목을 Lazy하게 child을 생성해준다.
             return Text(chatDocs[index]['text']);
