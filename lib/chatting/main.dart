@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_study/chatting/message/new_message.dart';
+import 'package:flutter_study/chatting/screens/chat_screen.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +15,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: Home()
+      // home에 Scaffold 위젯을 전달해줘야 한다.
+        home: ChatScreen() // chats에 저장된 값 보기
     );
   }
 }

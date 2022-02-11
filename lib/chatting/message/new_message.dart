@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -13,9 +14,13 @@ class _NewMessageState extends State<NewMessage> {
   var _userEnterMessage = '';
 
   void _sendMessage() {
+
+    final currentUser = FirebaseAuth.instance.currentUser;
+
     FirebaseFirestore.instance.collection("chat").add({
       'text' : _userEnterMessage,
-      'time' : Timestamp.now()
+      'time' : Timestamp.now(),
+      'userID' : currentUser!.uid,
     });
     _controller.clear(); // input controller 내용 지우기
   }
@@ -29,6 +34,7 @@ class _NewMessageState extends State<NewMessage> {
         children: [
           Expanded(
             child: TextField(
+              maxLines: null,
               controller: _controller,
               decoration: InputDecoration(labelText: 'Send a message...'),
               onChanged: (value) { // onChanged가 실행되면 값이 value에 들어온다.
