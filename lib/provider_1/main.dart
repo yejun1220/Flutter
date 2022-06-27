@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_study/provider_1/fish_model.dart';
+import 'package:flutter_study/provider_1/seafish_model.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -11,8 +12,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => FishModel(name: 'Salmon', quantity: 10, size: 'big'),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => FishModel(name: 'Salmon', quantity: 10, size: 'big'),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SeaFishModel(name: 'Salmon', seaQuantity: 0, size: 'middle'),
+        )
+      ],
       child: MaterialApp(
         home: FishOrder(),
       ),
@@ -119,16 +127,21 @@ class SpicyB extends StatelessWidget {
     return Column(
       children: [
         Text(
-          'Fish Quantity: ${Provider.of<FishModel>(context).quantity}',
+          'Fish Quantity: ${Provider.of<SeaFishModel>(context).seaQuantity}',
           style: TextStyle(fontSize: 16, color: Colors.red, fontWeight: FontWeight.bold),
         ),
         Text(
-          'Fish Size: ${Provider.of<FishModel>(context).size}',
+          'Fish Size: ${Provider.of<SeaFishModel>(context).size}',
           style: TextStyle(fontSize: 16, color: Colors.red, fontWeight: FontWeight.bold),
         ),
         SizedBox(
           height: 20,
         ),
+        ElevatedButton(
+            onPressed: () {
+              Provider.of<SeaFishModel>(context, listen: false).changeSeaFishNumber();
+            },
+            child: Text('Sea fish Quantity')),
         Low()
       ],
     );
