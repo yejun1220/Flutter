@@ -1,7 +1,14 @@
-class FishModel {
+import 'package:flutter/material.dart';
+
+class FishModel with ChangeNotifier {
   final String name;
-  final int quantity;
+  int quantity;
   final String size;
 
   FishModel({required this.name, required this.quantity, required this.size});
+
+  void changeFishNumber() {
+    quantity++;
+    notifyListeners();
+  }
 }

@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Provider(
+    return ChangeNotifierProvider(
       create: (context) => FishModel(name: 'Salmon', quantity: 10, size: 'big'),
       child: MaterialApp(
         home: FishOrder(),
@@ -173,6 +173,11 @@ class SpicyC extends StatelessWidget {
         SizedBox(
           height: 20,
         ),
+        ElevatedButton(
+            onPressed: () {
+              Provider.of<FishModel>(context, listen: false).changeFishNumber();
+            },
+            child: Text('change fish Quantity'))
       ],
     );
   }
