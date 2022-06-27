@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_study/provider_1/fish_model.dart';
-import 'package:flutter_study/provider_1/seafish_model.dart';
+import 'package:flutter_study/provider/fish_model.dart';
+import 'package:flutter_study/provider/seafish_model.dart';
 import 'package:provider/provider.dart';
 
 void main() {
