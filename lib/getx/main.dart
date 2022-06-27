@@ -11,7 +11,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Controller controller = Get.put(Controller());
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -24,9 +23,10 @@ class MyApp extends StatelessWidget {
             children: [
               // 어떤 타입의 데이터를 사용할지 알려줘야 한다.
               GetBuilder<Controller>(
+                init: Controller(),
                 // builder는 function을 파라미터로 가진다.
                 builder: (_) => Text(
-                  'Current value is ${controller.x}',
+                  'Current value is ${Get.find<Controller>().x}',
                   style: TextStyle(fontSize: 20, color: Colors.red),
                 ),
               ), // state를 화면에 다시 그려 주는 역할
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  controller.increment();
+                  Get.find<Controller>().increment();
                 },
                 child: Text('Add number'),
               ),
