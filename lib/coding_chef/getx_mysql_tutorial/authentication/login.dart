@@ -1,7 +1,14 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_study/coding_chef/getx_mysql_tutorial/api/api.dart';
 import 'package:flutter_study/coding_chef/getx_mysql_tutorial/authentication/signup.dart';
+import 'package:flutter_study/coding_chef/getx_mysql_tutorial/model/user.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -11,7 +18,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   var formKey = GlobalKey<FormState>();
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
@@ -66,10 +72,8 @@ class _LoginPageState extends State<LoginPage> {
                             padding: const EdgeInsets.only(left: 20.0),
                             child: TextFormField(
                               controller: emailController,
-                              validator: (val) =>
-                              val == "" ? "Please enter email" : null,
-                              decoration: InputDecoration(
-                                  border: InputBorder.none, hintText: 'Email'),
+                              validator: (val) => val == "" ? "Please enter email" : null,
+                              decoration: InputDecoration(border: InputBorder.none, hintText: 'Email'),
                             ),
                           ),
                         ),
@@ -81,18 +85,14 @@ class _LoginPageState extends State<LoginPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 25.0),
                         child: Container(
                           decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              border: Border.all(color: Colors.white),
-                              borderRadius: BorderRadius.circular(12)),
+                              color: Colors.grey[200], border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(12)),
                           child: Padding(
                             padding: const EdgeInsets.only(left: 20.0),
                             child: TextFormField(
                               controller: passwordController,
-                              validator: (val) =>
-                              val == "" ? "Please enter password" : null,
+                              validator: (val) => val == "" ? "Please enter password" : null,
                               obscureText: true,
-                              decoration: InputDecoration(
-                                  border: InputBorder.none, hintText: 'Password'),
+                              decoration: InputDecoration(border: InputBorder.none, hintText: 'Password'),
                             ),
                           ),
                         ),
@@ -104,24 +104,17 @@ class _LoginPageState extends State<LoginPage> {
                   height: 10,
                 ),
                 GestureDetector(
-                  onTap: (){
-
-                  },
+                  onTap: () {},
                   child: Container(
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 25.0),
                       child: Container(
                         padding: EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(12)),
+                        decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(12)),
                         child: Center(
                           child: Text(
                             'Sign in',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
+                            style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
@@ -139,8 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                       onTap: () => Get.to(() => SignupPage()),
                       child: Text(
                         ' Register Now!',
-                        style: TextStyle(
-                            color: Colors.blue, fontWeight: FontWeight.bold),
+                        style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
                       ),
                     )
                   ],
@@ -151,5 +143,41 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  userLogin() async {
+    try {
+      var response = await http.post(
+        Uri.parse(API.login),
+        body: {
+          'user_email': emailController.text.trim(),
+          'user_password': passwordController.text.trim(),
+        },
+      );
+
+      if (response.statusCode == 200) {
+        var responseBody = jsonDecode(response.body);
+        if (responseBody['success'] == true) {
+          Fluttertoast.showToast(
+            msg: "Login successfully",
+          );
+          User userInfo = User.fromJson(responseBody['userData']);
+
+          setState(() {
+            passwordController.clear();
+            emailController.clear();
+          });
+        } else {
+          Fluttertoast.showToast(
+            msg: "Please check your email and password",
+          );
+        }
+      }
+    } catch (e) {
+      log('user login error : ' + e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+      );
+    }
   }
 }
