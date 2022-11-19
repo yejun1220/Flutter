@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_study/coding_chef/getx_mysql_tutorial/api/api.dart';
 import 'package:flutter_study/coding_chef/getx_mysql_tutorial/authentication/signup.dart';
 import 'package:flutter_study/coding_chef/getx_mysql_tutorial/model/user.dart';
+import 'package:flutter_study/coding_chef/getx_mysql_tutorial/user/pages/main_screen.dart';
+import 'package:flutter_study/coding_chef/getx_mysql_tutorial/user/remember_user.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,6 +23,46 @@ class _LoginPageState extends State<LoginPage> {
   var formKey = GlobalKey<FormState>();
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
+
+  userLogin() async {
+    try {
+      var response = await http.post(
+        Uri.parse(API.login),
+        body: {
+          'user_email': emailController.text.trim(),
+          'user_password': passwordController.text.trim(),
+        },
+      );
+
+      if (response.statusCode == 200) {
+        var responseBody = jsonDecode(response.body);
+        if (responseBody['success'] == true) {
+          Fluttertoast.showToast(
+            msg: "Login successfully",
+          );
+          User userInfo = User.fromJson(responseBody['userData']);
+
+          await RememberUser.saveRememberUserInfo(userInfo);
+
+          Get.to(MainScreen());
+
+          setState(() {
+            passwordController.clear();
+            emailController.clear();
+          });
+        } else {
+          Fluttertoast.showToast(
+            msg: "Please check your email and password",
+          );
+        }
+      }
+    } catch (e) {
+      log('user login error : ' + e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +146,11 @@ class _LoginPageState extends State<LoginPage> {
                   height: 10,
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    if(formKey.currentState!.validate()) {
+                      userLogin();
+                    }
+                  },
                   child: Container(
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 25.0),
@@ -143,41 +189,5 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-  }
-
-  userLogin() async {
-    try {
-      var response = await http.post(
-        Uri.parse(API.login),
-        body: {
-          'user_email': emailController.text.trim(),
-          'user_password': passwordController.text.trim(),
-        },
-      );
-
-      if (response.statusCode == 200) {
-        var responseBody = jsonDecode(response.body);
-        if (responseBody['success'] == true) {
-          Fluttertoast.showToast(
-            msg: "Login successfully",
-          );
-          User userInfo = User.fromJson(responseBody['userData']);
-
-          setState(() {
-            passwordController.clear();
-            emailController.clear();
-          });
-        } else {
-          Fluttertoast.showToast(
-            msg: "Please check your email and password",
-          );
-        }
-      }
-    } catch (e) {
-      log('user login error : ' + e.toString());
-      Fluttertoast.showToast(
-        msg: e.toString(),
-      );
-    }
   }
 }
